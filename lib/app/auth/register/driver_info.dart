@@ -241,7 +241,7 @@ class _DriverInformationState extends State<DriverInformation> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
-                            return 'Vehicle Model can\'t be empty';
+                            return 'Means of identity can\'t be empty';
                           }
                         },
                         onChanged: (text) => setState(() {
