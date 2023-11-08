@@ -67,7 +67,6 @@ class AssistantMethods {
         UserModel userModel = UserModel.fromSnapshot(snapshot);
 
         // Now you can use the userModel object
-        print(userModel);
       } catch (err) {
         print(err.toString());
       }

@@ -121,27 +121,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           },
           child: Text('Forgot Password ?')),
       SizedBox(height: 16.0),
-      // ElevatedButton.icon(
-      //   onPressed: () {
-      //     widget.auth.signInWithGoogle();
-      //     // Perform registration with Google logic here
-      //   },
-      //   icon: Image.asset('images/google.png',
-      //       height: 24.0), // Replace with your Google icon
-      //   label: Text('Sign in with Google'),
-      //   style: ElevatedButton.styleFrom(
-      //     primary: Colors.red, // Customize the button background color
-      //     onPrimary: Colors.white, // Customize the button text color
-      //   ),
-      // ),
-      TextButton(
-          child: Text('Need an account? Register'),
-          onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => EmailRegisterPage(),
-                  fullscreenDialog: true,
-                ),
-              )),
+      // TextButton(
+      //     child: Text('Need an account? Register'),
+      //     onPressed: () => Navigator.of(context).push(
+      //           MaterialPageRoute<void>(
+      //             builder: (context) => EmailRegisterPage(),
+      //             fullscreenDialog: true,
+      //           ),
+      //         )),
     ];
   }
 

@@ -34,7 +34,7 @@
               "client_id": "463821131261-d3kh74f4t1sooieoi9o1rcel7j7jfeb3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.gocab2"
+                "bundle_id": "com.logistics.gocabdriver"
               }
             }
           ]
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:463821131261:android:7e76d4d8e731fef2911d94",
         "android_client_info": {
-          "package_name": "com.example.gocab2"
+          "package_name": "com.logistics.gocabdriver"
         }
       },
       "oauth_client": [
@@ -53,7 +53,7 @@
           "client_id": "463821131261-9qfuarhcc6vgg6ohdu95s5nmknlumgf1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.gocab2",
+            "package_name": "com.logistics.gocabdriver",
             "certificate_hash": "01b9d817e3e0baa1570ccc6be361d765c3cd7144"
           }
         },
@@ -78,7 +78,7 @@
               "client_id": "463821131261-d3kh74f4t1sooieoi9o1rcel7j7jfeb3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.gocab2"
+                "bundle_id": "com.logistics.gocabdriver"
               }
             }
           ]

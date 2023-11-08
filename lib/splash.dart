@@ -26,10 +26,13 @@ class _SplashState extends State<Splash> {
         FirebaseAuth.instance.currentUser != null
             ? AssistantMethods.readCurrentOnlineUserInfo()
             : null;
-        Navigator.push(context, MaterialPageRoute(builder: (c) => MapScreen()));
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (c) => MapScreen()), (route) => true);
       } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => EmailSignInPage()));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (c) => EmailSignInPage()),
+            (route) => true);
       }
     });
   }

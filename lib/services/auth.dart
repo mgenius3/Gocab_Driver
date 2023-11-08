@@ -77,7 +77,13 @@ class Auth implements AuthBase {
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     final authResult = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
-    return _userFromFirebase(authResult.user);
+
+    bool? success = await checkVerificationStatus();
+    if (success == true) {
+      return _userFromFirebase(authResult.user);
+    } else {
+      throw Error();
+    }
   }
 
   @override
@@ -98,12 +104,6 @@ class Auth implements AuthBase {
     if (currentUser != null) {
       try {
         String userUid = currentUser!.uid;
-
-        // Store additional user profile information in Firestore
-        // await FirebaseFirestore.instance
-        //     .collection('drivers')
-        //     .doc(userUid)
-        //     .set(userMap);
 
         userMap['id'] = userUid;
 
@@ -139,6 +139,43 @@ class Auth implements AuthBase {
 
       Fluttertoast.showToast(msg: "Submitted successfully");
       return true;
+    } catch (err) {
+      Fluttertoast.showToast(msg: err.toString());
+      return false;
+    }
+  }
+
+  Future<bool?> checkVerificationStatus() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+
+      // Fetch the verification status of the driver
+      DatabaseReference driverRef = FirebaseDatabase.instance
+          .ref()
+          .child('drivers')
+          .child(user!.uid)
+          .child('information/verification_status');
+      DataSnapshot snapshot = await driverRef.get();
+
+      // Check if the verification status is "on_review", "approved", or "declined"
+      String verificationStatus = snapshot.value.toString();
+      if (verificationStatus == "on review") {
+        // The driver is still under review
+        Fluttertoast.showToast(
+            msg: "Your driver information is currently under review.");
+        return false;
+      } else if (verificationStatus == "approved") {
+        return true;
+      } else if (verificationStatus == "declined") {
+        // The driver's information has been declined
+        Fluttertoast.showToast(
+            msg: "Your driver information has been declined.");
+        return false;
+      } else {
+        // The driver's verification status is unknown
+        Fluttertoast.showToast(msg: "Register as a Driver on our website");
+        return false;
+      }
     } catch (err) {
       Fluttertoast.showToast(msg: err.toString());
       return false;
