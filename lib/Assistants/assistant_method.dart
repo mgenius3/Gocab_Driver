@@ -164,12 +164,14 @@ class AssistantMethods {
         .then((snap) {
       // Check if there is a matching document
       if (snap.snapshot.value != null) {
-        onlineDriverData.id = (snap.snapshot.value as Map)['id'];
+        onlineDriverData.id = currentUser!.uid;
         onlineDriverData.name = (snap.snapshot.value as Map)['name'];
         onlineDriverData.phone = (snap.snapshot.value as Map)["phone"];
         onlineDriverData.email = (snap.snapshot.value as Map)["email"];
         onlineDriverData.address = (snap.snapshot.value as Map)["address"];
         onlineDriverData.ratings = (snap.snapshot.value as Map)["ratings"];
+        onlineDriverData.organisation =
+            (snap.snapshot.value as Map)['organisation'];
 
         onlineDriverData.v_color =
             (snap.snapshot.value as Map)["information"]["v_colour"];

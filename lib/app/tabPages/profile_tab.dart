@@ -86,10 +86,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(color: Colors.red),
-                  )),
+                  child: const Text("Cancel",
+                      style: TextStyle(color: Colors.red))),
               TextButton(
                   onPressed: () {
                     userRef.child(firebaseAuth.currentUser!.uid).update({
@@ -105,10 +103,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
 
                     Navigator.pop(context);
                   },
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(color: Colors.black),
-                  ))
+                  child:
+                      const Text("Ok", style: TextStyle(color: Colors.black)))
             ],
           );
         });
@@ -122,7 +118,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Update"),
+            title: const Text("Update"),
             content: SingleChildScrollView(
                 child: Column(children: [
               TextFormField(
@@ -134,10 +130,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(color: Colors.red),
-                  )),
+                  child: const Text("Cancel",
+                      style: TextStyle(color: Colors.red))),
               TextButton(
                   onPressed: () {
                     userRef.child(firebaseAuth.currentUser!.uid).update({
@@ -153,10 +147,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
 
                     Navigator.pop(context);
                   },
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(color: Colors.black),
-                  ))
+                  child:
+                      const Text("Ok", style: TextStyle(color: Colors.black)))
             ],
           );
         });
@@ -175,8 +167,9 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                 backgroundColor: Colors.transparent,
                 leading: IconButton(
                     onPressed: () {},
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.black)),
-                title: Text("Profile Screen",
+                    icon:
+                        const Icon(Icons.arrow_back_ios, color: Colors.black)),
+                title: const Text("Profile Screen",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold))),
             body: ListView(
@@ -187,24 +180,13 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 50),
                         child: Column(
                           children: [
-                            // Container(
-                            //     padding: EdgeInsets.all(50),
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.lightBlue,
-                            //       shape: BoxShape.circle,
-                            //     ),
-                            //     child: Icon(
-                            //       Icons.person,
-                            //       color: Colors.white,
-                            //     )),
-
                             CircleAvatar(
                               backgroundColor: Colors
                                   .blue, // Customize the background color as needed
                               radius: 30, // Customize the radius as needed
                               child: Text(
                                 "${onlineDriverData.name![0].toUpperCase()}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors
@@ -217,8 +199,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("${onlineDriverData.name}",
-                                    style: TextStyle(
-                                      color: Colors.blue,
+                                    style: const TextStyle(
+                                      color: Colors.white,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     )),
@@ -227,7 +209,8 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                                       showDriverNameDialogAlert(
                                           context, onlineDriverData.name!);
                                     },
-                                    icon: Icon(Icons.edit, color: Colors.blue))
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.white))
                               ],
                             ),
                             Divider(
@@ -239,28 +222,24 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                               children: [
                                 Text("${onlineDriverData.phone}",
                                     style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
                                 IconButton(
                                     onPressed: () {
                                       showDriverPhoneDialogAlert(
                                           context, onlineDriverData.phone!);
                                     },
-                                    icon: Icon(Icons.edit, color: Colors.blue))
+                                    icon: Icon(Icons.edit, color: Colors.white))
                               ],
                             ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.white,
-                            ),
+                            const Divider(thickness: 1, color: Colors.white),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("${onlineDriverData.address}",
                                     style: TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.white,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     )),
@@ -269,26 +248,57 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                                       showDriverAddressDialogAlert(
                                           context, onlineDriverData.address!);
                                     },
-                                    icon: Icon(Icons.edit, color: Colors.blue))
+                                    icon: Icon(Icons.edit, color: Colors.white))
                               ],
                             ),
-                            Divider(
+                            const Divider(
                               thickness: 1,
                               color: Colors.white,
                             ),
+                            onlineDriverData.organisation != null
+                                ? Column(
+                                    children: [
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text("Organisations",
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  "${onlineDriverData.organisation}",
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              const Icon(Icons.group,
+                                                  color: Colors.white)
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      const Divider(
+                                          thickness: 1, color: Colors.white),
+                                    ],
+                                  )
+                                : const SizedBox(),
                             Text("${onlineDriverData.email!}",
-                                style: TextStyle(
-                                    color: Colors.blue,
+                                style: const TextStyle(
+                                    color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                     "${onlineDriverData.v_model} \n ${onlineDriverData.v_color} (${onlineDriverData.v_number})",
-                                    style: TextStyle(
-                                        color: Colors.blue,
+                                    style: const TextStyle(
+                                        color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
                                 Image.asset(

@@ -74,23 +74,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     SizedBox(height: 16.0),
                     ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(padding: EdgeInsets.all(10)),
                       onPressed: _submit,
                       child: Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.send),
-                              onPressed: () {
-                                _submit();
-                              },
-                            ),
-                            Text("Send Forgot Password Link")
+                            Text(
+                              "Send Forgot Password Link",
+                              style: TextStyle(fontSize: 20),
+                            )
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 5.0),
                     TextButton(
                       child: Text('Have an account? Sign in'),
                       onPressed: () => Navigator.of(context).push(

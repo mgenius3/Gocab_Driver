@@ -11,6 +11,7 @@ import 'package:Driver/Assistants/assistant_method.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:Driver/localNotifications/notification_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -32,17 +33,17 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
 
   LocationPermission? _locationPermission;
 
-  String statusText = "Now Offline";
+  String statusText = "Now Online";
   Color buttonColor = Colors.grey;
   bool isDriverActive = false;
 
-  checkIfLocationPermissionAllowed() async {
-    _locationPermission = await Geolocator.requestPermission();
+  // checkIfLocationPermissionAllowed() async {
+  //   _locationPermission = await Geolocator.requestPermission();
 
-    if (_locationPermission == LocationPermission.denied) {
-      _locationPermission = await Geolocator.requestPermission();
-    }
-  }
+  //   if (_locationPermission == LocationPermission.denied) {
+  //     _locationPermission = await Geolocator.requestPermission();
+  //   }
+  // }
 
   locateDriverPosition() async {
     Position cPosition = await Geolocator.getCurrentPosition(
@@ -67,57 +68,18 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
     AssistantMethods.readDriverRatings(context);
   }
 
-  readCurrentDriverInformation() async {
-    // currentUser = firebaseAuth.currentUser;
-    // print(currentUser);
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child('drivers')
-    //     .child(currentUser!.uid)
-    //     .once()
-    //     .then((snap) {
-    //   // Check if there is a matching document
-    //   if (snap.snapshot.value != null) {
-    //     onlineDriverData.id = (snap.snapshot.value as Map)['id'];
-    //     onlineDriverData.name = (snap.snapshot.value as Map)['name'];
-    //     onlineDriverData.phone = (snap.snapshot.value as Map)["phone"];
-    //     onlineDriverData.email = (snap.snapshot.value as Map)["email"];
-    //     onlineDriverData.address = (snap.snapshot.value as Map)["address"];
-    //     onlineDriverData.ratings = (snap.snapshot.value as Map)["ratings"];
-
-    //     onlineDriverData.v_color =
-    //         (snap.snapshot.value as Map)["information"]["v_colour"];
-    //     onlineDriverData.v_number =
-    //         (snap.snapshot.value as Map)["information"]["v_number"];
-    //     onlineDriverData.v_model =
-    //         (snap.snapshot.value as Map)["information"]["v_model"];
-    //     onlineDriverData.car_type =
-    //         (snap.snapshot.value as Map)["information"]["offers"];
-    //     driverVehicleType =
-    //         (snap.snapshot.value as Map)["information"]["offers"];
-
-    //     print(onlineDriverData);
-    //     print(onlineDriverData.car_type);
-    //   }
-    // });
-    // AssistantMethods.driverInformation()
-
-    // AssistantMethods.readDriverEarnings(context);
-    // AssistantMethods.readDriverRatings(context);
-  }
-
   @override
   void initState() {
     super.initState();
 
-    checkIfLocationPermissionAllowed();
+    driverIsOnlineNow();
+    // checkIfLocationPermissionAllowed();
     // readCurrentDriverInformation();
     AssistantMethods.driverInformation(context);
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
     pushNotificationSystem.initialzeCloudMessaging(context);
     pushNotificationSystem.generateAndGetToken();
-
-    NotificationService().init(context); //
+    // NotificationService().init(context); //
     WidgetsBinding.instance?.addObserver(this);
   }
 
@@ -133,6 +95,9 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
       // Run your function here when the app goes into the background or is closed.
       driverIsOfflineNow();
     }
+    //  else if (state == AppLifecycleState.resumed) {
+    //   driverIsOnlineNow();
+    // }
   }
 
   @override
@@ -140,7 +105,7 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
     return Stack(
       children: [
         GoogleMap(
-          padding: EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100),
           mapType: MapType.normal,
           myLocationButtonEnabled: true,
           myLocationEnabled: true,
@@ -178,20 +143,20 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
                     onPressed: () {
                       if (isDriverActive != true) {
                         driverIsOnlineNow();
-                        updateDriversLocationAtRealTime();
+                        // updateDriversLocationAtRealTime();
 
-                        setState(() {
-                          statusText = "Now Online";
-                          isDriverActive = true;
-                          buttonColor = Colors.transparent;
-                        });
+                        // setState(() {
+                        //   statusText = "Now Online";
+                        //   isDriverActive = true;
+                        //   buttonColor = Colors.transparent;
+                        // });
                       } else {
                         driverIsOfflineNow();
-                        setState(() {
-                          statusText = "Now Offline";
-                          isDriverActive = false;
-                          buttonColor = Colors.grey;
-                        });
+                        // setState(() {
+                        //   statusText = "Now Offline";
+                        //   isDriverActive = false;
+                        //   buttonColor = Colors.grey;
+                        // });
                         Fluttertoast.showToast(msg: "You are offline now");
                       }
                     },
@@ -203,7 +168,7 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
                         )),
                     child: statusText != "Now Online"
                         ? Text(
-                            statusText,
+                            'Go Online',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -235,6 +200,15 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
 
     ref.set("idle");
     ref.onValue.listen((event) {});
+
+    /////////////////////////////
+    updateDriversLocationAtRealTime();
+
+    setState(() {
+      statusText = "Now Online";
+      isDriverActive = true;
+      buttonColor = Colors.transparent;
+    });
   }
 
   updateDriversLocationAtRealTime() {
@@ -264,6 +238,12 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
     ref.remove();
     ref = null;
 
+/////////////////////////////////////////////
+    setState(() {
+      statusText = "Now Offline";
+      isDriverActive = false;
+      buttonColor = Colors.grey;
+    });
 //kill application
     // Future.delayed(Duration(milliseconds: 2000), () {
     //   SystemChannels.platform.invokeListMethod("SystemNavigator.pop");

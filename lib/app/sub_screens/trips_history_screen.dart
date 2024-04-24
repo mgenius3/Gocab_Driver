@@ -17,12 +17,12 @@ class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               "Trips History",
               style: TextStyle(color: Colors.black),
             ),
             leading: IconButton(
-                icon: Icon(Icons.close, color: Colors.black),
+                icon: const Icon(Icons.close, color: Colors.black),
                 onPressed: () {
                   //SystemNavigator.pop()
                   Navigator.pop(context);
@@ -30,7 +30,7 @@ class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
             centerTitle: true,
             elevation: 0.0),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: ListView.separated(
               itemBuilder: (context, i) {
                 return Card(
@@ -41,7 +41,7 @@ class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
                             Provider.of<AppInfo>(context, listen: false)
                                 .allTripHistoryInformationList[i]));
               },
-              separatorBuilder: (context, i) => SizedBox(height: 30),
+              separatorBuilder: (context, i) => const SizedBox(height: 30),
               itemCount: Provider.of<AppInfo>(context, listen: false)
                   .allTripHistoryInformationList
                   .length),

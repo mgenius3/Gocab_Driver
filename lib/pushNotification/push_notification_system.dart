@@ -10,8 +10,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './notification_dialog.dart';
 import 'dart:async';
 import '../localNotifications/notification_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:Driver/app/sub_screens/map_screen.dart';
 
 class PushNotificationSystem {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   StreamSubscription<DatabaseEvent>? messagesSubscription;
@@ -25,7 +29,6 @@ class PushNotificationSystem {
   Future<void> initialzeCloudMessaging(BuildContext context) async {
     // Your existing initialization code remains the same...
 
-    print(firebaseAuth.currentUser!.uid);
     try {
       // Listen for new user trip being added to the Realtime Database
       String? userRideRequestId;
@@ -41,13 +44,10 @@ class PushNotificationSystem {
             Map<dynamic, dynamic> messageData = snapvalue.snapshot.value as Map;
 
             userRideRequestId = messageData["rideRequest"];
+
             readUserRideRequestInformation(userRideRequestId, context);
-            NotificationService().showNotifications(userRideRequestId);
-
             // ++count;
-
             // print(count);
-
             // if (count <= 1) {
             //   print(count);
             //   readUserRideRequestInformation(userRideRequestId, context);
@@ -145,8 +145,15 @@ class PushNotificationSystem {
 
               userRideRequestDetails.rideRequestId = rideRequestId;
 
-              print("hello");
+              print(event.snapshot.value);
               if (event.snapshot.value == 'waiting') {
+                //send local notification
+                LocalNotificationService.showRequestNotification(
+                    title: "New Ride Request",
+                    body: "Tap to Accept",
+                    payload: userRideRequestDetails.destinationAddress,
+                    fln: flutterLocalNotificationsPlugin);
+
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => NotificationDialogBox(
@@ -178,8 +185,9 @@ class PushNotificationSystem {
 
         ref.set("idle");
         Fluttertoast.showToast(msg: "This Ride Request has been cancelled");
-
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (c) => const MapScreen()));
       }
     });
   }

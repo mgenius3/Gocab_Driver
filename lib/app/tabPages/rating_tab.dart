@@ -63,28 +63,26 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        backgroundColor: Colors.white60,
+      body: Center(
+        // margin: const EdgeInsets.only(top:50),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(20),
+        //   color: Colors.white60,
+        // ),
         child: Container(
-            margin: EdgeInsets.all(4),
+            margin: const EdgeInsets.all(4),
             width: double.infinity,
             decoration: BoxDecoration(
-                color: Colors.white54, borderRadius: BorderRadius.circular(15)),
+                color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              SizedBox(
-                height: 22.0,
-              ),
-              Text("My Ratings",
+              const SizedBox(height: 22.0),
+              const Text("My Ratings",
                   style: TextStyle(
-                    fontSize: 22,
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  )),
-              SizedBox(height: 20),
+                      fontSize: 22,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue)),
+              const SizedBox(height: 20),
               SmoothStarRating(
                 rating: ratingNumber,
                 allowHalfRating: true,
@@ -93,18 +91,13 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
                 borderColor: Colors.blue,
                 size: 40,
               ),
-              SizedBox(
-                height: 12.0,
-              ),
+              const SizedBox(height: 12.0),
               Text(titleStarsRating,
                   style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  )),
-              SizedBox(
-                height: 18.0,
-              ),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue)),
+              const SizedBox(height: 18.0)
             ])),
       ),
     );

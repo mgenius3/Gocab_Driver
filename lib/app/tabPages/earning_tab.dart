@@ -34,7 +34,7 @@ class _EarningsTabPageState extends State<EarningsTabPage> {
                   padding: EdgeInsets.symmetric(vertical: 80),
                   child: Column(
                     children: [
-                      Text("Your Earnings",
+                      const Text("Your Earnings",
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                       SizedBox(height: 10),
                       Text(
@@ -51,44 +51,46 @@ class _EarningsTabPageState extends State<EarningsTabPage> {
             ),
             //Total Number of trips
 
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => TripsHistoryScreen()));
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white54,
-                ),
-                child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          onlineDriverData.car_type == "Taxi"
-                              ? "images/car.png"
-                              : "images/bike.png",
-                          width: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "Trips Completed",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                                Provider.of<AppInfo>(context, listen: false)
-                                    .countTotalTrips
-                                    .toString(),
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
-                          ),
-                        )
-                      ],
-                    )))
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (c) => TripsHistoryScreen()));
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     primary: Colors.white54,
+            //   ),
+            //   child:
+            Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                color: Colors.white54,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      onlineDriverData.car_type == "Taxi"
+                          ? "images/car.png"
+                          : "images/bike.png",
+                      width: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text("Trips Completed",
+                        style: TextStyle(color: Colors.black54)),
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                            Provider.of<AppInfo>(context, listen: false)
+                                .countTotalTrips
+                                .toString(),
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                      ),
+                    )
+                  ],
+                )),
+            // )
           ],
         ));
   }

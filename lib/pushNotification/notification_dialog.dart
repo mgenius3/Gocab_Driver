@@ -26,7 +26,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10), color: Colors.black),
@@ -38,48 +38,37 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                   ? "images/car.png"
                   : "images/bike.png",
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               "New Ride Request",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
                   color: Colors.blue),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
-            Divider(
-              height: 2,
-              thickness: 2,
-              color: Colors.blue,
-            ),
+            const Divider(height: 2, thickness: 2, color: Colors.blue),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "images/pick.png",
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      Image.asset("images/pick.png", width: 30, height: 30),
+                      SizedBox(width: 10),
                       Expanded(
                           child: Container(
                         child: Text(
                           widget.userRideRequestDetails!.originAddress!,
-                          style: TextStyle(fontSize: 16, color: Colors.blue),
+                          style:
+                              const TextStyle(fontSize: 16, color: Colors.blue),
                         ),
                       ))
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Image.asset(
@@ -87,9 +76,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                         width: 30,
                         height: 30,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Container(
                           child: Text(
@@ -117,11 +104,12 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        audioPlayer.pause();
-                        audioPlayer.stop();
-                        audioPlayer = AssetsAudioPlayer();
+                        // audioPlayer.pause();
+                        // audioPlayer.stop();
+                        // audioPlayer = AssetsAudioPlayer();
 
                         Navigator.pop(context);
+                        cancelRideRequest();
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,
@@ -155,21 +143,18 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
     );
   }
 
+  final driver = FirebaseDatabase.instance
+      .ref()
+      .child("drivers")
+      .child(firebaseAuth.currentUser!.uid);
+
+  final allRides = FirebaseDatabase.instance.ref().child('All Ride Requests');
+
   acceptRideRequest(BuildContext context) {
-    FirebaseDatabase.instance
-        .ref()
-        .child("drivers")
-        .child(firebaseAuth.currentUser!.uid)
-        .child("newRideStatus")
-        .once()
-        .then((snap) {
-      if (snap.snapshot.value == "idle") {
-        FirebaseDatabase.instance
-            .ref()
-            .child("drivers")
-            .child(firebaseAuth.currentUser!.uid)
-            .child("newRideStatus")
-            .set("accepted");
+//change driver status to accepted
+    driver.child("newRideStatus").once().then((snap) {
+      if (snap.snapshot.value != "accepted") {
+        driver.child("newRideStatus").set("accepted");
 
         // AssistantMethods.pauseLiveLocationUpdates();
 
@@ -201,5 +186,11 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
         ref.set("idle");
       }
     });
+  }
+
+  cancelRideRequest() {
+    //remove the user request message
+    DatabaseReference messagesRef = driver.child('messages');
+    messagesRef.remove();
   }
 }

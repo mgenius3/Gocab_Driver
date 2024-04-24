@@ -25,22 +25,27 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
 
+  //declare a Global key
+  final _formkey = GlobalKey<FormState>();
+
   void _submit() async {
     try {
-      setState(
-        () {
-          loading = true;
-        },
-      );
-      await widget.auth.signInWithEmailAndPassword(
-          _emailTextController.text.toString(),
-          _passwordTextController.text.toString());
-      await Fluttertoast.showToast(msg: "Successfully Logged In");
-      loading = false;
-      Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-        builder: (context) => MapScreen(),
-        fullscreenDialog: true,
-      ));
+      if (_formkey.currentState!.validate()) {
+        setState(
+          () {
+            loading = true;
+          },
+        );
+        await widget.auth.signInWithEmailAndPassword(
+            _emailTextController.text.trim(),
+            _passwordTextController.text.trim());
+        await Fluttertoast.showToast(msg: "Successfully Logged In");
+        loading = false;
+        Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+          builder: (context) => MapScreen(),
+          fullscreenDialog: true,
+        ));
+      }
     } catch (e) {
       setState(
         () {
@@ -57,78 +62,115 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   List<Widget> _buildChildren() {
     return [
-      Container(child: Image.asset("images/logo.png")),
-      SizedBox(height: 26),
-      Text(
-        "Sign In",
-        style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-      ),
-      SizedBox(height: 26),
-      TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Email address',
-          prefixIcon: Icon(Icons.email_outlined),
-          border: OutlineInputBorder(), // Set the border to a rectangular shape
-        ),
-        onChanged: (text) => setState(() {
-          _emailTextController.text = text;
-        }),
-      ),
-      SizedBox(height: 16.0),
-      TextFormField(
-        obscureText: !_isPasswordVisible,
-        decoration: InputDecoration(
-          labelText: 'Password',
-          suffixIcon: IconButton(
-            icon: Icon(
-              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
-              setState(() {
-                _isPasswordVisible = !_isPasswordVisible;
-              });
-            },
-          ),
-          border: OutlineInputBorder(), // Set the border to a rectangular shape
-        ),
-        onChanged: (text) => setState(() {
-          _passwordTextController.text = text;
-        }),
-      ),
-      SizedBox(height: 16.0),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(padding: EdgeInsets.all(10)),
-        onPressed: !loading ? _submit : null,
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              !loading
-                  ? Text("Sign In", style: TextStyle(fontSize: 24))
-                  : CircularProgressIndicator(
-                      color: Colors.white,
-                      backgroundColor: Color(0xFF0D47A1),
-                    )
+      Form(
+          key: _formkey,
+          child: Column(
+            children: [
+              // Container(child: Image.asset("images/logo.png")),
+              const SizedBox(height: 26),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Icon(
+                  Icons.lock,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 26),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Email address',
+                  prefixIcon: Icon(Icons.email_outlined),
+                  border:
+                      OutlineInputBorder(), // Set the border to a rectangular shape
+                ),
+                onChanged: (text) => setState(() {
+                  _emailTextController.text = text;
+                }),
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return 'Email can\'t be empty';
+                  }
+                  if (text.length < 2) {
+                    return "Please enter a valid email";
+                  }
+                  if (text.length > 49) {
+                    return 'Email can\t be more than 50';
+                  }
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                obscureText: !_isPasswordVisible,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                  border:
+                      OutlineInputBorder(), // Set the border to a rectangular shape
+                ),
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return 'Password can\'t be empty';
+                  }
+                  if (text.length < 6) {
+                    return "Password can not be less than 6";
+                  }
+                  if (text.length > 25) {
+                    return 'Password can\'t be more than 25';
+                  }
+                },
+                onChanged: (text) => setState(() {
+                  _passwordTextController.text = text;
+                }),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(padding: EdgeInsets.all(10)),
+                onPressed: !loading ? _submit : null,
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      !loading
+                          ? const Text("Sign In",
+                              style: TextStyle(fontSize: 24))
+                          : const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                backgroundColor: Color(0xFF0D47A1),
+                              ))
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const ForgotPasswordScreen()));
+                  },
+                  child: const Text('Forgot Password ?')),
+              const SizedBox(height: 16.0),
             ],
-          ),
-        ),
-      ),
-      SizedBox(height: 16.0),
-      GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (c) => ForgotPasswordScreen()));
-          },
-          child: Text('Forgot Password ?')),
-      SizedBox(height: 16.0),
-      // TextButton(
-      //     child: Text('Need an account? Register'),
-      //     onPressed: () => Navigator.of(context).push(
-      //           MaterialPageRoute<void>(
-      //             builder: (context) => EmailRegisterPage(),
-      //             fullscreenDialog: true,
-      //           ),
-      //         )),
+          ))
     ];
   }
 

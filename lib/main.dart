@@ -5,23 +5,53 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:Driver/services/auth.dart';
 import 'package:Driver/splash.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'infoHandler/app_info.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'localNotifications/notification_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(GoAppDriver());
 }
 
-class GoAppDriver extends StatelessWidget {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// background handler
+Future backgroundHandler(RemoteMessage msg) async {}
+
+class GoAppDriver extends StatefulWidget {
   const GoAppDriver({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final MaterialColor customPrimarySwatch = MaterialColor(
+  _GoAppDriverState createState() => _GoAppDriverState();
+}
+
+class _GoAppDriverState extends State<GoAppDriver> {
+  late MaterialColor customPrimarySwatch;
+
+  LocationPermission? _locationPermission;
+  checkIfLocationPermissionAllowed() async {
+    _locationPermission = await Geolocator.requestPermission();
+
+    if (_locationPermission == LocationPermission.denied) {
+      _locationPermission = await Geolocator.requestPermission();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfLocationPermissionAllowed();
+    LocalNotificationService.initialize(flutterLocalNotificationsPlugin);
+    customPrimarySwatch = MaterialColor(
       0xFF0D47A1,
       <int, Color>{
         50: Color(0xFFE3F2FD),
@@ -37,16 +67,20 @@ class GoAppDriver extends StatelessWidget {
         // 900: Color(0xFFFF4500)
       },
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => AppInfo(),
-        child: MaterialApp(
-          title: 'GoCab Driver',
-          theme: ThemeData(
-            primarySwatch: customPrimarySwatch,
-          ),
-          debugShowCheckedModeBanner: false,
-          home: Splash(),
-        ));
+      create: (context) => AppInfo(),
+      child: MaterialApp(
+        title: 'GoCab Driver',
+        theme: ThemeData(
+          primarySwatch: customPrimarySwatch,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Splash(),
+      ),
+    );
   }
 }
