@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../infoHandler/app_info.dart';
 import '../../global/global.dart';
 import '../sub_screens/trips_history_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../sub_screens/webview.dart';
 
 class EarningsTabPage extends StatefulWidget {
   const EarningsTabPage({super.key});
@@ -36,7 +38,7 @@ class _EarningsTabPageState extends State<EarningsTabPage> {
                     children: [
                       const Text("Your Earnings",
                           style: TextStyle(color: Colors.white, fontSize: 16)),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                           "\u20A6" +
                               Provider.of<AppInfo>(context, listen: false)
@@ -90,7 +92,18 @@ class _EarningsTabPageState extends State<EarningsTabPage> {
                     )
                   ],
                 )),
-            // )
+            const SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WebViewScreen(
+                                url: "https://gocab.vercel.app/withdraw",
+                                heading: "Withdraw",
+                              )));
+                },
+                child: const Text("Withdraw Funds"))
           ],
         ));
   }

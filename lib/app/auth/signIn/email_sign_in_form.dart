@@ -10,6 +10,7 @@ import 'package:Driver/app/sub_screens/forgot_password.dart';
 import 'package:Driver/app/sub_screens/map_screen.dart';
 import '../../../utils/helper.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../../sub_screens/webview.dart';
 
 class EmailSignInForm extends StatefulWidget {
   EmailSignInForm({required this.auth});
@@ -169,6 +170,27 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                   },
                   child: const Text('Forgot Password ?')),
               const SizedBox(height: 16.0),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const ForgotPasswordScreen()));
+                  },
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WebViewScreen(
+                                      url:
+                                          "https://gocab.vercel.app/driver/register",
+                                      heading: "Driver Registration",
+                                    )));
+                      },
+                      child: const Text('Register as a driver',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)))),
             ],
           ))
     ];

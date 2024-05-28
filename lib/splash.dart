@@ -28,6 +28,10 @@ class _SplashState extends State<Splash> {
             : null;
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (c) => MapScreen()));
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (c) => EmailSignInPage()),
+        // );
       } else {
         Navigator.pushReplacement(
           context,

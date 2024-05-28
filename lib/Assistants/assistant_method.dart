@@ -170,6 +170,9 @@ class AssistantMethods {
         onlineDriverData.email = (snap.snapshot.value as Map)["email"];
         onlineDriverData.address = (snap.snapshot.value as Map)["address"];
         onlineDriverData.ratings = (snap.snapshot.value as Map)["ratings"];
+        onlineDriverData.profile_url =
+            (snap.snapshot.value as Map)["profile_url"];
+
         onlineDriverData.organisation =
             (snap.snapshot.value as Map)['organisation'];
 

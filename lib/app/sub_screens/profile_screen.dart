@@ -28,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool? refresh = false;
 
   Future<void> uploadImageToFirestore(String userId) async {
+    print(userId);
     try {
       // Pick an image from the device's gallery
       final ImagePicker _picker = ImagePicker();

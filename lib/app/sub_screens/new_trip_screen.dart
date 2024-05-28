@@ -284,6 +284,8 @@ class _NewTripScreenState extends State<NewTripScreen> {
       databaseReference.child("driverName").set(onlineDriverData.name);
       databaseReference.child("driverPhone").set(onlineDriverData.phone);
       databaseReference.child("ratings").set(onlineDriverData.ratings);
+      databaseReference.child("profile_url").set(onlineDriverData.profile_url);
+
       databaseReference.child("car_details").set(
           onlineDriverData.v_model.toString() +
               " " +

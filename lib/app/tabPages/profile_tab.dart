@@ -5,6 +5,9 @@ import '../../global/global.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './home_tab.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class ProfileTabPage extends StatefulWidget {
   const ProfileTabPage({super.key});
@@ -19,6 +22,43 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
   final phoneTextEditingController = TextEditingController();
 
   DatabaseReference userRef = FirebaseDatabase.instance.ref().child("drivers");
+
+  Future<void> uploadImageToFirebase(String userId) async {
+    try {
+      // Pick an image from the device's gallery
+      final ImagePicker _picker = ImagePicker();
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        // Create a reference to the Firebase Storage bucket
+        Reference storageRef = FirebaseStorage.instance.ref();
+
+        // Generate a unique ID for the image
+        String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+
+        // Upload the image to Firestore
+        TaskSnapshot snapshot = await storageRef
+            .child('users/$userId/images/$imageName.jpg')
+            .putFile(File(image.path));
+
+        // Retrieve the download URL of the uploaded image
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+
+        // Store the download URL in Firestore
+
+        userRef.child(firebaseAuth.currentUser!.uid).update({
+          "profile_url": downloadUrl,
+        }).then((value) {
+          Fluttertoast.showToast(msg: "Updated successfully");
+          AssistantMethods.driverInformation(context);
+        }).catchError((errorMessage) {
+          Fluttertoast.showToast(msg: "Error Occured. \n $errorMessage");
+        });
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
 
   Future<void> showDriverNameDialogAlert(BuildContext context, String name) {
     nameTextEditingController.text = name;
@@ -180,19 +220,31 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 50),
                         child: Column(
                           children: [
-                            CircleAvatar(
-                              backgroundColor: Colors
-                                  .blue, // Customize the background color as needed
-                              radius: 30, // Customize the radius as needed
-                              child: Text(
-                                "${onlineDriverData.name![0].toUpperCase()}",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors
-                                      .white, // Customize the text color as needed
-                                ),
-                              ),
+                            GestureDetector(
+                              onTap: () {
+                                uploadImageToFirebase(
+                                    firebaseAuth.currentUser!.uid);
+                              },
+                              child: onlineDriverData.profile_url != null
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          onlineDriverData.profile_url!),
+                                      radius: 30,
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors
+                                          .blue, // Customize the background color as needed
+                                      radius: 30,
+                                      child: Text(
+                                        "${onlineDriverData.name![0].toUpperCase()}",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors
+                                              .white, // Customize the text color as needed
+                                        ),
+                                      ),
+                                    ),
                             ),
                             SizedBox(height: 30),
                             Row(

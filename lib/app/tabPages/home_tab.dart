@@ -63,8 +63,6 @@ class _HomeTabPageState extends State<HomeTabPage> with WidgetsBindingObserver {
         await AssistantMethods.searchAddressForGeographicCoordinates(
             driverCurrentPosition!, context);
 
-    print(humanReadableAddress);
-
     AssistantMethods.readDriverRatings(context);
   }
 
